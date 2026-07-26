@@ -79,18 +79,20 @@ enum PayoutStatus {
 }
 
 model User {
-  id             String   @id @default(dbgenerated("gen_random_uuid()")) @map("user_id") @db.Uuid
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @map("user_id") @db.Uuid
   role           UserRole
-  full_name      String   @map("full_name")
-  email          String?  @unique
-  password_hash  String?  @map("password_hash")
-  oauth_provider String?  @map("oauth_provider")
+  full_name      String    @map("full_name")
+  email          String    @unique
+  password_hash  String?   @map("password_hash")
+  oauth_provider String?   @map("oauth_provider")
   city           String?
   // consent_flags  Json     @default("{}") @map("consent_flags")
-  is_verified    Boolean  @default(false) @map("is_verified")
-  created_at     DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updated_at     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
-  refresh_token  String?  @map("refresh_token")
+  is_verified    Boolean   @default(false) @map("is_verified")
+  otp            String?   @map("otp")
+  otp_expires_at DateTime? @map("otp_expires_at") @db.Timestamptz
+  created_at     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updated_at     DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  refresh_token  String?   @map("refresh_token")
 
   vendors  Vendor[]
   packages Package[]
