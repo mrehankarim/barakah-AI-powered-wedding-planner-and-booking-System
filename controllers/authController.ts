@@ -13,6 +13,10 @@ import { otpGenerator } from "../utils/otpgenerator";
 import EmailService from "../services/emailsendingservice";
 import { authVerificationEmail } from "../constants";
 
+interface CustomJwtPayload extends jwt.JwtPayload {
+    id: string;
+}
+
 const validationRoles: UserRole[] = ["admin", "end_user", "vendor"]
 
 
