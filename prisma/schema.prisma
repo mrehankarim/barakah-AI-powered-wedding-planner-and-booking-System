@@ -87,8 +87,10 @@ model User {
   oauth_provider String?  @map("oauth_provider")
   city           String?
   // consent_flags  Json     @default("{}") @map("consent_flags")
+  is_verified    Boolean  @default(false) @map("is_verified")
   created_at     DateTime @default(now()) @map("created_at") @db.Timestamptz
   updated_at     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  refresh_token  String?  @map("refresh_token")
 
   vendors  Vendor[]
   packages Package[]
