@@ -1,14 +1,19 @@
 import { Resend } from "resend";
+import VerificationEmail from "../email/VerificationEmail";
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_EMAIL_VERIFICATION_KEY)
 
+class EmailService {
+    static async sendVerificationEmail(from: string, to: string, name: string, otp: string) {
+        await resend.emails.send({
+            from: from,
+            to: to,
+            subject: "Verify Your Email Address",
+            react: VerificationEmail({ name, OTP: otp })
+        });
 
-const sendEmail = async (to: string, subject: string, html: string) => {
-    await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: to,
-        subject: subject,
-        html: html
-    });
+    }
 }
-export { sendEmail }
+
+
+export default EmailService
