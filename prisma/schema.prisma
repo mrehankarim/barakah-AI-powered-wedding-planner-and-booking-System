@@ -96,6 +96,7 @@ model User {
   packages Package[]
   bookings Booking[]
   reviews  Review[]
+  wishlist Wishlist[]
 
   @@map("user")
 }
@@ -155,6 +156,7 @@ model VendorListing {
   package_line_items      PackageLineItem[]
   bookings                Booking[]
   reviews                 Review[]
+  wishlist                Wishlist[]
 
   @@index([city, category_id, status], name: "idx_listing_city_category_status")
   @@index([vendor_id], name: "idx_listing_vendor")
@@ -317,4 +319,17 @@ model Review {
   @@unique([booking_id, user_id])
   @@index([listing_id], name: "idx_review_listing")
   @@map("review")
+}
+
+model Wishlist {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @map("wishlist_id") @db.Uuid
+  user_id    String   @map("user_id") @db.Uuid
+  listing_id String   @map("listing_id") @db.Uuid
+  created_at DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user    User          @relation(fields: [user_id], references: [id])
+  listing VendorListing @relation(fields: [listing_id], references: [id])
+
+  @@unique([user_id, listing_id])
+  @@map("wishlist")
 }
