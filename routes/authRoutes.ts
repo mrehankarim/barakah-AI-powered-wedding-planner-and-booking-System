@@ -1,5 +1,12 @@
 import { Router } from "express";
-import { resgiterUser, loginUser, logoutUser, updateUserDetails, refreshAccessAndRefreshToken, verifyOTP } from "../controllers/authController";
+import {
+  resgiterUser,
+  loginUser,
+  logoutUser,
+  updateUserDetails,
+  refreshAccessAndRefreshToken,
+  verifyOTP,
+} from "../controllers/authController";
 import isAuthenticated from "../middlewares/isAuthenticated";
 
 const router = Router();
@@ -166,6 +173,7 @@ router.route("/logout").post(isAuthenticated, logoutUser);
  *         description: Unauthorized
  */
 router.route("/update-details").patch(isAuthenticated, updateUserDetails);
+router.route("/me").patch(isAuthenticated, updateUserDetails);
 
 /**
  * @openapi

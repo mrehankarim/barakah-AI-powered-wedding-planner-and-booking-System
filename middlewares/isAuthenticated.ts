@@ -21,7 +21,10 @@ const isAuthenticated = asyncHandler(async (req: Request, res: Response, next: N
         }
     })
     if (!user)
-        throw new ApiError(401, "Unauthorized")
+        throw new ApiError(401, "Unauthorized: User not found")
+    if (!user.is_verified) {
+        throw new ApiError(401, "Unauthorized: User not verified")
+    }
     req.user = user
     next()
 })
