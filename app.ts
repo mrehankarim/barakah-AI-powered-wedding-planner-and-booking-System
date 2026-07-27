@@ -10,6 +10,10 @@ import bookingRouter from "./routes/bookingRoutes";
 import reviewRouter from "./routes/reviewRoutes";
 import dashboardRouter from "./routes/dashboardRoutes";
 import wishlistRouter from "./routes/wishlistRoutes";
+import vendorRouter from "./routes/vendorRoutes";
+import listingRouter from "./routes/listingRoutes";
+import paymentRouter from "./routes/paymentRoutes";
+import adminRouter from "./routes/adminRoutes";
 
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();
@@ -71,11 +75,15 @@ app.get("/docs.json", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/listings", listingRouter);
 app.use("/api/v1/packages", packageRouter);
 app.use("/api/v1/bookings", bookingRouter);
+app.use("/api/v1/payments", paymentRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/wishlist", wishlistRouter);
+app.use("/api/v1/vendor", vendorRouter);
+app.use("/api/v1/admin", adminRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({

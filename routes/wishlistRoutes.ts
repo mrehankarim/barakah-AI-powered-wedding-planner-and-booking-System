@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { toggleWishlist, getWishlist, removeFromWishlist } from "../controllers/wishlistController";
-import { verifyJWT } from "../middlewares/authMiddleware";
+import isAuthenticated from "../middlewares/isAuthenticated";
 
 const router = Router();
 
@@ -11,7 +11,7 @@ const router = Router();
  *   description: Saved vendor listings and wishlist management
  */
 
-router.use(verifyJWT);
+router.use(isAuthenticated);
 
 /**
  * @openapi

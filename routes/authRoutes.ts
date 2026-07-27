@@ -7,7 +7,6 @@ import {
   refreshAccessAndRefreshToken,
   verifyOTP,
 } from "../controllers/authController";
-import { verifyJWT } from "../middlewares/authMiddleware";
 import isAuthenticated from "../middlewares/isAuthenticated";
 
 const router = Router();
@@ -141,7 +140,7 @@ router.route("/login").post(loginUser);
  *       401:
  *         description: Unauthorized
  */
-router.route("/logout").post(verifyJWT, logoutUser);
+router.route("/logout").post(isAuthenticated, logoutUser);
 
 /**
  * @openapi
@@ -173,8 +172,8 @@ router.route("/logout").post(verifyJWT, logoutUser);
  *       401:
  *         description: Unauthorized
  */
-router.route("/update-details").patch(verifyJWT, updateUserDetails);
-router.route("/me").patch(verifyJWT, updateUserDetails);
+router.route("/update-details").patch(isAuthenticated, updateUserDetails);
+router.route("/me").patch(isAuthenticated, updateUserDetails);
 
 /**
  * @openapi

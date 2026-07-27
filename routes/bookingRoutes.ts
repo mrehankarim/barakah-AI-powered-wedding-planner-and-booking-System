@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createBooking, listBookings, getBookingById, cancelBooking } from "../controllers/bookingController";
-import { verifyJWT } from "../middlewares/authMiddleware";
+import isAuthenticated from "../middlewares/isAuthenticated";
 
 const router = Router();
 
@@ -11,7 +11,7 @@ const router = Router();
  *   description: Booking management, details, and cancellation
  */
 
-router.use(verifyJWT);
+router.use(isAuthenticated);
 
 /**
  * @openapi

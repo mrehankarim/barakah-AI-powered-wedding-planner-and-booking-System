@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createReview, updateReview, deleteReview, getVendorReviews } from "../controllers/reviewController";
-import { verifyJWT } from "../middlewares/authMiddleware";
+import isAuthenticated from "../middlewares/isAuthenticated";
 
 const router = Router();
 
@@ -29,7 +29,7 @@ const router = Router();
  */
 router.route("/vendors/:id/reviews").get(getVendorReviews);
 
-router.use(verifyJWT);
+router.use(isAuthenticated);
 
 /**
  * @openapi

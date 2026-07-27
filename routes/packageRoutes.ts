@@ -9,7 +9,7 @@ import {
   updatePackageItem,
   removePackageItem,
 } from "../controllers/packageController";
-import { verifyJWT } from "../middlewares/authMiddleware";
+import isAuthenticated from "../middlewares/isAuthenticated";
 
 const router = Router();
 
@@ -20,7 +20,7 @@ const router = Router();
  *   description: Custom package builder and item management
  */
 
-router.use(verifyJWT);
+router.use(isAuthenticated);
 
 /**
  * @openapi

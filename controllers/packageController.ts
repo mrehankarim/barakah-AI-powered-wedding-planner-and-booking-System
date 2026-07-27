@@ -71,7 +71,6 @@ const listPackages = asyncHandler(async (req: Request, res: Response) => {
           actual_price_paisa: true,
           is_locked: true,
           rank_at_selection: true,
-          created_at: true,
         },
       },
     },

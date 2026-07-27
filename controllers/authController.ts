@@ -19,6 +19,9 @@ interface CustomJwtPayload extends jwt.JwtPayload {
 
 const validationRoles: UserRole[] = ["admin", "end_user", "vendor"]
 
+interface CustomJwtPayload extends jwt.JwtPayload {
+    id: string;
+}
 
 const generateAccessAndRefreshToken = (user: User) => {
     const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
@@ -64,6 +67,7 @@ const resgiterUser = asyncHandler(async (req: Request, res: Response) => {
     const emailValidation = validateEmail(email)
     if (!emailValidation.success)
         throw new ApiError(400, emailValidation.error.message)
+
     const existingUser = await prisma.user.findFirst({
         where: {
             email: email
@@ -157,8 +161,6 @@ const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
     return res.status(200).json(new ApiResponse(200, {}, "OTP verified successfully"))
 
 })
-
-
 
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
 

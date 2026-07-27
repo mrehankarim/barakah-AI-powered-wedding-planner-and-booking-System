@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { myPackages, myBookings, myReviews, updateProfile } from "../controllers/dashboardController";
-import { verifyJWT } from "../middlewares/authMiddleware";
+import isAuthenticated from "../middlewares/isAuthenticated";
 
 const router = Router();
 
@@ -11,7 +11,7 @@ const router = Router();
  *   description: User dashboard overview, packages, bookings, reviews, and profile
  */
 
-router.use(verifyJWT);
+router.use(isAuthenticated);
 
 /**
  * @openapi
