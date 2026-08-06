@@ -84,6 +84,42 @@ router.use(isVendor);
  *         description: Vendor profile with all listings summary
  */
 router.get("/me", getMyVendorProfile);
+
+/**
+ * @openapi
+ * /vendor/me:
+ *   patch:
+ *     summary: Update my vendor profile
+ *     tags: [Vendor]
+ *     security:
+ *       - bearerAuth: []
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               legal_business_name:
+ *                 type: string
+ *                 example: "Al-Noor Marquee Updated"
+ *               payout_bank_iban:
+ *                 type: string
+ *                 example: "PK36SCBL0000001123456702"
+ *               cnic_or_reg_number:
+ *                 type: string
+ *                 example: "3520212345678"
+ *     responses:
+ *       200:
+ *         description: Vendor profile updated successfully
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden – vendor role required
+ */
 router.patch("/me", editVendorProfile);
 
 // ─── Listings ─────────────────────────────────────────────────────────────────
