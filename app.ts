@@ -14,6 +14,7 @@ import vendorRouter from "./routes/vendorRoutes";
 import listingRouter from "./routes/listingRoutes";
 import paymentRouter from "./routes/paymentRoutes";
 import adminRouter from "./routes/adminRoutes";
+import categoryRouter from "./routes/categoryRoutes";
 
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();
@@ -84,6 +85,7 @@ app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/wishlist", wishlistRouter);
 app.use("/api/v1/vendor", vendorRouter);
 app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/categories", categoryRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({

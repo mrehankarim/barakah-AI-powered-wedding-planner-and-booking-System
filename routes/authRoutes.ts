@@ -173,6 +173,37 @@ router.route("/logout").post(isAuthenticated, logoutUser);
  *         description: Unauthorized
  */
 router.route("/update-details").patch(isAuthenticated, updateUserDetails);
+
+/**
+ * @openapi
+ * /auth/me:
+ *   patch:
+ *     summary: Update current user profile (alias for /update-details)
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fullName:
+ *                 type: string
+ *                 example: John Doe Updated
+ *               city:
+ *                 type: string
+ *                 example: Karachi
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ */
 router.route("/me").patch(isAuthenticated, updateUserDetails);
 
 /**

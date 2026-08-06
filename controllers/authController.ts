@@ -76,39 +76,39 @@ const resgiterUser = asyncHandler(async (req: Request, res: Response) => {
     if (existingUser)
         throw new ApiError(400, "User already exists")
 
-    const user = await prisma.user.create({
-        data: {
-            full_name: fullName,
-            email: email,
-            password_hash: await bcrypt.hash(password, 10),
-            city: city,
-            role: role
-        },
-        select: {
-            id: true,
-            full_name: true,
-            email: true,
-            city: true,
-            role: true,
-            created_at: true
-
-        }
-    })
-    //send verification email
     const otp = otpGenerator()
-    await prisma.user.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            otp: await bcrypt.hash(otp, 10),
-            otp_expires_at: new Date(Date.now() + 10 * 60 * 1000)
-        }
+    const passwordHash = await bcrypt.hash(password, 10)
+    const otpHash = await bcrypt.hash(otp, 10)
+
+    const user = await prisma.$transaction(async (tx) => {
+        const created = await tx.user.create({
+            data: {
+                full_name: fullName,
+                email: email,
+                password_hash: passwordHash,
+                city: city,
+                role: role,
+                otp: otpHash,
+                otp_expires_at: new Date(Date.now() + 10 * 60 * 1000)
+            },
+            select: {
+                id: true,
+                full_name: true,
+                email: true,
+                city: true,
+                role: true,
+                created_at: true
+            }
+        })
+        return created
     })
 
-    //send email
-
-    await EmailService.sendVerificationEmail(authVerificationEmail, user.email, user.full_name, otp)
+    try {
+        await EmailService.sendVerificationEmail(authVerificationEmail, user.email, user.full_name, otp)
+    } catch (emailError) {
+        await prisma.user.delete({ where: { id: user.id } })
+        throw new ApiError(500, "Failed to send verification email. Please try again.")
+    }
 
     return res
         .status(201)
@@ -135,18 +135,19 @@ const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
         throw new ApiError(401, "Invalid OTP")
     }
     if (user.otp_expires_at! < new Date()) {
+        const newOtp = otpGenerator()
         await prisma.user.update({
             where: {
                 id: user.id
             },
             data: {
-                otp: await bcrypt.hash(otpGenerator(), 10),
+                otp: await bcrypt.hash(newOtp, 10),
                 otp_expires_at: new Date(Date.now() + 10 * 60 * 1000)
             }
         })
-        await EmailService.sendVerificationEmail(authVerificationEmail, user.email, user.full_name, otp)
+        await EmailService.sendVerificationEmail(authVerificationEmail, user.email, user.full_name, newOtp)
 
-        throw new ApiError(401, "OTP has expired")
+        throw new ApiError(401, "OTP has expired, New OTP has been sent to your email")
     }
     await prisma.user.update({
         where: {
